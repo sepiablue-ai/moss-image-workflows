@@ -1,0 +1,402 @@
+{
+  "version": 0.4,
+  "last_node_id": 14,
+  "last_link_id": 6,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UNETLoader",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "moss_image_base_int8_convrot.safetensors",
+        "default"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "pos": [
+        370,
+        0
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "qwen3.5_9b_int8_convrot.safetensors",
+        "moss_image",
+        "default"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "VAELoader",
+      "pos": [
+        740,
+        0
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "flux2-vae.safetensors"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "LoraLoaderModelOnly",
+      "pos": [
+        1110,
+        0
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoraLoaderModelOnly"
+      },
+      "widgets_values": [
+        "moss_image_base_8step_dmd.safetensors",
+        1.0
+      ]
+    },
+    {
+      "id": 12,
+      "type": "MossStoryboardLayout",
+      "pos": [
+        0,
+        440
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "name": "columns",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "name": "rows",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "name": "spec",
+          "type": "STRING",
+          "links": [
+            5
+          ]
+        },
+        {
+          "name": "layout_json",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "template",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MossStoryboardLayout"
+      },
+      "widgets_values": [
+        "",
+        6,
+        "16:9",
+        640,
+        "auto",
+        2,
+        3,
+        8,
+        8,
+        25,
+        false,
+        "object"
+      ]
+    },
+    {
+      "id": 13,
+      "type": "MossStoryboardSampler",
+      "pos": [
+        370,
+        440
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 2
+        },
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 3
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 4
+        },
+        {
+          "name": "spec",
+          "type": "STRING",
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "grid",
+          "type": "IMAGE",
+          "links": [
+            6
+          ]
+        },
+        {
+          "name": "panels",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": []
+        },
+        {
+          "name": "spec",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "prompt_used",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MossStoryboardSampler"
+      },
+      "widgets_values": [
+        "[STYLE] Rough hand-drawn film storyboard frames, loose graphite pencil sketch on cream paper, sepia brown monochrome only, quick gestural linework, light cross hatching and flat sepia wash shading, unfinished pre-production concept sketch, cinematic 16:9 framing. No text, no letters, no numbers, no captions, no speech bubbles, no signature.\n[PANEL 1] Long shot, static camera. Floating island airstrip. a young woman pilot with two long braids, goggles on her head, aviator jacket and leather mail satchel walks beside a small single-engine propeller airplane. Cliffs and a distant lighthouse.\n[PANEL 2] Insert close-up of hands only. a young woman pilot with two long braids, goggles on her head, aviator jacket and leather mail satchel slides one envelope into her leather satchel next to the airplane fuselage.\n[PANEL 3] Medium tracking shot from the side. The small propeller airplane flies left to right above a sea of clouds, the pilot visible in the open cockpit.\n[PANEL 4] Over-the-shoulder shot from behind the pilot inside the cockpit: her braids and goggles in the foreground, instrument panel, a lighthouse on a cliff island ahead through the windshield.\n[PANEL 5] Medium two-shot at the lighthouse door. a young woman pilot with two long braids, goggles on her head, aviator jacket and leather mail satchel on the left hands one envelope to an old lighthouse keeper with a white beard, flat cap and long coat on the right.\n[PANEL 6] Long shot at sunset. On the left the pilot waves beside her airplane; on the right an old lighthouse keeper with a white beard, flat cap and long coat waves back from the lighthouse door.",
+        "",
+        8,
+        1.0,
+        "euler",
+        "sgm_uniform",
+        24102411,
+        "fixed",
+        1.0,
+        6,
+        "16:9",
+        640,
+        "auto",
+        8,
+        8,
+        "layout",
+        "object",
+        false,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 14,
+      "type": "SaveImage",
+      "pos": [
+        740,
+        440
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 6
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ekonte/moss_only/sketch_grid"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      4,
+      0,
+      "MODEL"
+    ],
+    [
+      2,
+      4,
+      0,
+      13,
+      0,
+      "MODEL"
+    ],
+    [
+      3,
+      2,
+      0,
+      13,
+      1,
+      "CLIP"
+    ],
+    [
+      4,
+      3,
+      0,
+      13,
+      2,
+      "VAE"
+    ],
+    [
+      5,
+      12,
+      4,
+      13,
+      3,
+      "STRING"
+    ],
+    [
+      6,
+      13,
+      0,
+      14,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {}
+}

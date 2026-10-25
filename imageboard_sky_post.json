@@ -1,0 +1,448 @@
+{
+  "version": 0.4,
+  "last_node_id": 14,
+  "last_link_id": 7,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UNETLoader",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "moss_image_base_int8_convrot.safetensors",
+        "default"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "pos": [
+        370,
+        0
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "qwen3.5_9b_int8_convrot.safetensors",
+        "moss_image",
+        "default"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "VAELoader",
+      "pos": [
+        740,
+        0
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            5
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "flux2-vae.safetensors"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "LoraLoaderModelOnly",
+      "pos": [
+        1110,
+        0
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoraLoaderModelOnly"
+      },
+      "widgets_values": [
+        "moss_image_base_8step_dmd.safetensors",
+        1.0
+      ]
+    },
+    {
+      "id": 5,
+      "type": "LoraLoaderModelOnly",
+      "pos": [
+        0,
+        440
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoraLoaderModelOnly"
+      },
+      "widgets_values": [
+        "moss\\SepiaBlue_Luminous_MOSS-Image_v1.safetensors",
+        1.0
+      ]
+    },
+    {
+      "id": 12,
+      "type": "MossStoryboardLayout",
+      "pos": [
+        370,
+        440
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "name": "columns",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "name": "rows",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "name": "spec",
+          "type": "STRING",
+          "links": [
+            6
+          ]
+        },
+        {
+          "name": "layout_json",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "template",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MossStoryboardLayout"
+      },
+      "widgets_values": [
+        "",
+        6,
+        "4:3",
+        592,
+        "auto",
+        2,
+        3,
+        8,
+        8,
+        25,
+        false,
+        "object"
+      ]
+    },
+    {
+      "id": 13,
+      "type": "MossStoryboardSampler",
+      "pos": [
+        740,
+        440
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 3
+        },
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 4
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 5
+        },
+        {
+          "name": "spec",
+          "type": "STRING",
+          "link": 6
+        }
+      ],
+      "outputs": [
+        {
+          "name": "grid",
+          "type": "IMAGE",
+          "links": [
+            7
+          ]
+        },
+        {
+          "name": "panels",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": []
+        },
+        {
+          "name": "spec",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "prompt_used",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MossStoryboardSampler"
+      },
+      "widgets_values": [
+        "{\"summary\":{\"caption\":\"qsv2style. A polished Japanese animation storyboard page, six landscape pictures in a strict 2-column 3-row grid, read left to right, top to bottom. Clean white gutters. Each cell contains one illustration above a white caption strip with the specified shot number and Japanese sentence in small fine regular-weight Japanese Mincho serif body type, approximately 23 pixels high, with a separate small shot-number column and hairline gray rules. Exactly six illustrations and six captions. Cinematic anime drawing, natural anatomy, coherent props. Each picture depicts only the characters and time of day described inside its own box. The caption typography is quiet and restrained like a printed film storyboard: thin serif text, left aligned, ample surrounding white space; never large or bold. No title, watermark, signature, speech bubble or extra lettering. Do not print the style token.\"},\"items\":[{\"label\":\"object\",\"caption\":\"Wide shot at a floating island airstrip in clear daylight. Only one young adult female pilot, red hair in two braids, goggles on her head, cream aviator jacket, brown trousers and brown mail satchel, stands beside a small red single-engine propeller airplane. Distant floating islands, no elderly man.\",\"bbox\":[-680,-600,-344,-8]},{\"label\":\"object\",\"caption\":\"A restrained professional storyboard caption band on pure white paper. Hairline light gray bottom rule, one hairline vertical divider 68 pixels from the left edge. Generous quiet whitespace below the single line. No ornaments.\",\"bbox\":[-344,-600,-232,-8]},{\"label\":\"text\",\"caption\":\"Small delicate regular-weight serif shot number, 25 pixel type, aligned to the left number column. Thin Mincho numerals, not bold, not a headline.\",\"text\":\"01\",\"bbox\":[-318,-582,-287,-543]},{\"label\":\"text\",\"caption\":\"One understated line of small thin Japanese Mincho serif body text, regular weight, approximately 23 pixel character height. Left aligned and vertically aligned with the small shot number. Do not enlarge the text to fill the width. No bold or heavy sans-serif.\",\"text\":\"空の島を出発\",\"bbox\":[-315,-513,-287,-35]},{\"label\":\"object\",\"caption\":\"Close-up at the airstrip in daylight: the red-braided female pilot's cream-jacketed torso and two hands place one sealed blue envelope into her open brown leather mail satchel. Only this young woman's hands and torso are visible.\",\"bbox\":[-680,0,-344,592]},{\"label\":\"object\",\"caption\":\"A restrained professional storyboard caption band on pure white paper. Hairline light gray bottom rule, one hairline vertical divider 68 pixels from the left edge. Generous quiet whitespace below the single line. No ornaments.\",\"bbox\":[-344,0,-232,592]},{\"label\":\"text\",\"caption\":\"Small delicate regular-weight serif shot number, 25 pixel type, aligned to the left number column. Thin Mincho numerals, not bold, not a headline.\",\"text\":\"02\",\"bbox\":[-318,18,-287,57]},{\"label\":\"text\",\"caption\":\"One understated line of small thin Japanese Mincho serif body text, regular weight, approximately 23 pixel character height. Left aligned and vertically aligned with the small shot number. Do not enlarge the text to fill the width. No bold or heavy sans-serif.\",\"text\":\"手紙をかばんへ\",\"bbox\":[-315,87,-287,565]},{\"label\":\"object\",\"caption\":\"Wide flying shot: the small red single-engine airplane crosses white clouds in daylight. In its single open cockpit sits ONLY the young woman pilot, red braided hair, goggles, cream aviator jacket, hands on controls. No passenger. No elderly man.\",\"bbox\":[-224,-600,112,-8]},{\"label\":\"object\",\"caption\":\"A restrained professional storyboard caption band on pure white paper. Hairline light gray bottom rule, one hairline vertical divider 68 pixels from the left edge. Generous quiet whitespace below the single line. No ornaments.\",\"bbox\":[112,-600,224,-8]},{\"label\":\"text\",\"caption\":\"Small delicate regular-weight serif shot number, 25 pixel type, aligned to the left number column. Thin Mincho numerals, not bold, not a headline.\",\"text\":\"03\",\"bbox\":[138,-582,169,-543]},{\"label\":\"text\",\"caption\":\"One understated line of small thin Japanese Mincho serif body text, regular weight, approximately 23 pixel character height. Left aligned and vertically aligned with the small shot number. Do not enlarge the text to fill the width. No bold or heavy sans-serif.\",\"text\":\"雲の間を飛ぶ\",\"bbox\":[141,-513,169,-35]},{\"label\":\"object\",\"caption\":\"Rear over-the-shoulder cockpit shot of ONLY the young female pilot, two RED braids, cream aviator jacket, goggles. Her hands operate the red airplane's controls. Ahead through the windscreen stands a white lighthouse on a distant floating island above daylight clouds. The pilot is the young red-haired WOMAN, no man or white hair in this picture.\",\"bbox\":[-224,0,112,592]},{\"label\":\"object\",\"caption\":\"A restrained professional storyboard caption band on pure white paper. Hairline light gray bottom rule, one hairline vertical divider 68 pixels from the left edge. Generous quiet whitespace below the single line. No ornaments.\",\"bbox\":[112,0,224,592]},{\"label\":\"text\",\"caption\":\"Small delicate regular-weight serif shot number, 25 pixel type, aligned to the left number column. Thin Mincho numerals, not bold, not a headline.\",\"text\":\"04\",\"bbox\":[138,18,169,57]},{\"label\":\"text\",\"caption\":\"One understated line of small thin Japanese Mincho serif body text, regular weight, approximately 23 pixel character height. Left aligned and vertically aligned with the small shot number. Do not enlarge the text to fill the width. No bold or heavy sans-serif.\",\"text\":\"灯台が見える\",\"bbox\":[141,87,169,565]},{\"label\":\"object\",\"caption\":\"Medium two-shot OUTSIDE the lighthouse after landing. On the left the young female pilot with red twin braids, goggles, cream aviator jacket and brown satchel hands one blue envelope to an ELDERLY MAN on the right. The keeper has a short white beard, short white hair, blue cap and blue coat. Clearly different ages and faces. The elderly keeper stands on the ground by the door.\",\"bbox\":[232,-600,568,-8]},{\"label\":\"object\",\"caption\":\"A restrained professional storyboard caption band on pure white paper. Hairline light gray bottom rule, one hairline vertical divider 68 pixels from the left edge. Generous quiet whitespace below the single line. No ornaments.\",\"bbox\":[568,-600,680,-8]},{\"label\":\"text\",\"caption\":\"Small delicate regular-weight serif shot number, 25 pixel type, aligned to the left number column. Thin Mincho numerals, not bold, not a headline.\",\"text\":\"05\",\"bbox\":[594,-582,625,-543]},{\"label\":\"text\",\"caption\":\"One understated line of small thin Japanese Mincho serif body text, regular weight, approximately 23 pixel character height. Left aligned and vertically aligned with the small shot number. Do not enlarge the text to fill the width. No bold or heavy sans-serif.\",\"text\":\"灯台守に届ける\",\"bbox\":[597,-513,625,-35]},{\"label\":\"object\",\"caption\":\"Wide shot at sunset on the lighthouse island airstrip. The young red-braided female pilot in cream jacket stands on the LEFT beside her parked red propeller airplane and waves. The elderly white-bearded male keeper in blue cap and blue coat stands on the RIGHT beside the lighthouse door holding the blue envelope and waves back. Both on the ground, warm orange sky.\",\"bbox\":[232,0,568,592]},{\"label\":\"object\",\"caption\":\"A restrained professional storyboard caption band on pure white paper. Hairline light gray bottom rule, one hairline vertical divider 68 pixels from the left edge. Generous quiet whitespace below the single line. No ornaments.\",\"bbox\":[568,0,680,592]},{\"label\":\"text\",\"caption\":\"Small delicate regular-weight serif shot number, 25 pixel type, aligned to the left number column. Thin Mincho numerals, not bold, not a headline.\",\"text\":\"06\",\"bbox\":[594,18,625,57]},{\"label\":\"text\",\"caption\":\"One understated line of small thin Japanese Mincho serif body text, regular weight, approximately 23 pixel character height. Left aligned and vertically aligned with the small shot number. Do not enlarge the text to fill the width. No bold or heavy sans-serif.\",\"text\":\"手を振って別れる\",\"bbox\":[597,87,625,565]}],\"bbox_coord_space\":\"abs_centralized\",\"bbox_format\":\"yxyx\"}",
+        "",
+        8,
+        1.0,
+        "euler",
+        "sgm_uniform",
+        24102411,
+        "fixed",
+        1.0,
+        6,
+        "4:3",
+        592,
+        "auto",
+        8,
+        8,
+        "plain",
+        "object",
+        false,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 14,
+      "type": "SaveImage",
+      "pos": [
+        1110,
+        440
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ekonte/moss_only/imageboard_sky_post"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      4,
+      0,
+      "MODEL"
+    ],
+    [
+      2,
+      4,
+      0,
+      5,
+      0,
+      "MODEL"
+    ],
+    [
+      3,
+      5,
+      0,
+      13,
+      0,
+      "MODEL"
+    ],
+    [
+      4,
+      2,
+      0,
+      13,
+      1,
+      "CLIP"
+    ],
+    [
+      5,
+      3,
+      0,
+      13,
+      2,
+      "VAE"
+    ],
+    [
+      6,
+      12,
+      4,
+      13,
+      3,
+      "STRING"
+    ],
+    [
+      7,
+      13,
+      0,
+      14,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {}
+}

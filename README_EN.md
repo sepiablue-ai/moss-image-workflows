@@ -1,0 +1,113 @@
+# MOSS Image ComfyUI Workflows (Storyboard & E-Konte Collection)
+
+🌐 [日本語](README.md) · **English**
+
+**Ready-to-load ComfyUI workflows for MOSS-Image (INT8 ConvRot + 8-step DMD distilled LoRA). Generate authentic Japanese animation storyboard sheets (e-konte), 6-panel polished cinematic imageboards, and loose sketch grids in a single 8-step inference.**
+
+> **Author**: Kamimoto (かみもと) | Quick benchmarks & updates: **[X (@sep_is_heim)](https://x.com/sep_is_heim)** | In-depth write-ups (Japanese): **[note](https://note.com/sepiablue)**
+
+---
+
+## Overview
+
+This repository provides production-ready ComfyUI workflows built around **MOSS-Image**, an open-source multimodal and high-fidelity image foundation model. These workflows are tailored for animation and cinematic pre-production—including storyboard sheets, multi-panel narrative boards, and sketch grids.
+
+- **8-Step High-Speed Generation**: Powered by `moss_image_base_8step_dmd.safetensors`, delivering sharp, artifact-free compositions and high-resolution visuals in just 8 sampling steps.
+- **Native MOSS JSON Layout Control**: Employs bounding box coordinates (`abs_centralized` yxyx format) to simultaneously render ruled table borders, printed Japanese typography (titles, cut numbers, descriptions, dialogues, seconds), and pencil sketch drawings onto a single canvas.
+- **Panel-by-Panel Conditioning (via ComfyUI-MOSS-Storyboard)**: In 2×3 (6-panel) grids, describe each frame independently (`[PANEL 1]` through `[PANEL 6]`), with guaranteed clean separation rules and pixel-aligned per-panel cropping.
+- **Custom Style LoRA Integration**: Incorporates `SepiaBlue_Luminous_MOSS-Image_v1` (trigger: `qsv2style`) for luminous lighting, delicate colors, and cinematic anime aesthetics.
+
+---
+
+## Workflows Included
+
+| Workflow File | Category | Resolution / Layout | Key Highlights & Use Case |
+|---|---|---|---|
+| [`ekonte_p1.json`](ekonte_p1.json) | Japanese Animation E-Konte | 1216×1440 (Portrait Sheet) | *Sky Post* (Part 1/2). Ruled table, printed gothic text & pencil sketches in a single pass |
+| [`ekonte_p2.json`](ekonte_p2.json) | Japanese Animation E-Konte | 1216×1440 (Portrait Sheet) | *Sky Post* (Part 2/2). Cuts 4 through 6 concluding the storyboard sequence |
+| [`imageboard_cafe.json`](imageboard_cafe.json) | Polished Imageboard Grid | 6 Panels (2×3, 4:3 each) | Everyday café atmosphere. Japanese Mincho serif captions & luminous anime style |
+| [`imageboard_rainy_cat.json`](imageboard_rainy_cat.json) | Polished Imageboard Grid | 6 Panels (2×3, 4:3 each) | A girl and a stray cat on a rainy day. Emotional lighting and color storytelling |
+| [`imageboard_sky_post.json`](imageboard_sky_post.json) | Polished Imageboard Grid | 6 Panels (2×3, 4:3 each) | Seaplane mail delivery across floating island outposts. Adventurous cinematic sequence |
+| [`sketch_grid.json`](sketch_grid.json) | Loose Sketch Grid | 6 Panels (2×3, 16:9 each) | Monochrome sepia graphite pencil sketches. Pure composition & staging, no text |
+
+---
+
+## Detailed Breakdown
+
+### 1. Classic Japanese Animation Storyboard Sheets (E-Konte)
+
+Generates full-page, printed-style Japanese animation storyboard sheets on plain white paper. The layout features a 5-column ruled table containing Cut Number, Picture Frame, Shot Description, Dialogue, and Seconds.
+
+- **`ekonte_p1.json`**: *Sky Post* Storyboard — Page 1 of 2 (Cuts 1–3)
+- **`ekonte_p2.json`**: *Sky Post* Storyboard — Page 2 of 2 (Cuts 4–6)
+- **Resolution**: 1216 × 1440
+- **Under the Hood**: Uses MOSS-Image's native JSON prompt structure with exact coordinate-based bounding boxes (`summary` + `items` array). Printed Japanese gothic characters and rough sepia pencil sketch frames are synthesized simultaneously inside their allocated cells.
+- **Sampler Config**: Euler / `sgm_uniform` / 8 steps / CFG 1.0
+
+### 2. Polished Anime Imageboard Grids
+
+Ideal for visual development, art direction, and visual pitch decks where full-color cinematic anime frames are presented alongside quiet, restrained captions.
+
+- **`imageboard_cafe.json`** (Cozy café moments)
+- **`imageboard_rainy_cat.json`** (Rainy shelter with a cat)
+- **`imageboard_sky_post.json`** (Island flight & mail drop)
+- **Layout**: 2 columns × 3 rows (6 panels total), 4:3 aspect ratio per frame.
+- **Style LoRA**: `SepiaBlue_Luminous_MOSS-Image_v1.safetensors` (Weight 1.0, Trigger: `qsv2style`)
+- **Custom Nodes**: Powered by `ComfyUI-MOSS-Storyboard` (`MossStoryboardLayout`, `MossStoryboardSampler`).
+- **Typography & Aesthetics**: Each illustration sits above a white caption strip with a fine Japanese Mincho serif body text and shot index, mimicking printed film boards.
+
+### 3. Loose Sketch Storyboard Grid
+
+Focuses strictly on dynamic cinematography, character gesture, staging, and lighting contrast without typography or text distractions.
+
+- **`sketch_grid.json`**
+- **Layout**: 2 columns × 3 rows (6 panels total), cinematic 16:9 aspect ratio per frame.
+- **Visual Style**: Rough graphite pencil sketches with warm sepia monochrome washes on cream paper.
+- **Prompting Format**: Employs the `[STYLE] ... [PANEL 1] ... [PANEL 6]` tag format in `MossStoryboardSampler`, depicting an aviator girl flying to a remote cliff lighthouse.
+
+---
+
+## Required Models & File Placement
+
+Please ensure the required checkpoints and LoRAs are placed in their respective ComfyUI directories before loading the workflows:
+
+| Model Type | File Name | Target Directory | Description / Role |
+|---|---|---|---|
+| **UNet / Diffusion** | `moss_image_base_int8_convrot.safetensors` | `ComfyUI/models/unet/` (or `diffusion_models/`) | MOSS-Image INT8 ConvRot base checkpoint |
+| **CLIP / Text Encoder** | `qwen3.5_9b_int8_convrot.safetensors` | `ComfyUI/models/clip/` | Type: `moss_image` |
+| **VAE** | `flux2-vae.safetensors` | `ComfyUI/models/vae/` | FLUX.2 standard VAE |
+| **Acceleration LoRA** | `moss_image_base_8step_dmd.safetensors` | `ComfyUI/models/loras/` | 8-step DMD distilled LoRA (Weight: 1.0) |
+| **Style LoRA** | `SepiaBlue_Luminous_MOSS-Image_v1.safetensors` | `ComfyUI/models/loras/moss/` | Used in `imageboard_*.json` (Trigger: `qsv2style`) |
+
+---
+
+## Required Custom Nodes
+
+- **[ComfyUI-MOSS-Storyboard](https://github.com/sepiablue-ai/ComfyUI-MOSS-Storyboard)**
+  - Nodes: `MossStoryboardLayout`, `MossStoryboardSampler`, `MossStoryboardCrop`
+  - Installation: Clone into `ComfyUI/custom_nodes/` or install via ComfyUI Manager.
+- **ComfyUI**: Must include native MOSS-Image support (PR #17095 or later, recommended ComfyUI ≥ 0.42.0).
+
+---
+
+## Author & Community
+
+**Kamimoto (かみもと)**  
+Exploring local AI acceleration, VRAM reduction, and practical creative workflows on consumer hardware (RTX 4070 12GB).
+
+- **X (Twitter)**: [@sep_is_heim](https://x.com/sep_is_heim) — Benchmarks, speed metrics & visual updates
+- **note**: [かみもと｜ローカルAI生成](https://note.com/sepiablue) — Detailed tutorials & setup recipes
+- **GitHub**: [@sepiablue-ai](https://github.com/sepiablue-ai)
+
+### Related Repositories
+- [ComfyUI-MOSS-Storyboard](https://github.com/sepiablue-ai/ComfyUI-MOSS-Storyboard): MOSS-Image storyboard & multi-panel custom nodes
+- [minimax_h3_workflows](https://github.com/sepiablue-ai/minimax_h3_workflows): MiniMax H3 video workflows on 12GB VRAM
+- [ComfyUI-H3-X2-Stream](https://github.com/sepiablue-ai/ComfyUI-H3-X2-Stream): INT8 X2 VAE & async NVENC video saver
+
+---
+
+## License
+
+The workflow files in this repository are released under the [MIT License](LICENSE). They may be freely used, modified, redistributed, and integrated into personal or commercial projects.
+
+*Note: Models, LoRAs, and third-party custom nodes referenced by these workflows are subject to their respective creators' and distributors' licenses.*

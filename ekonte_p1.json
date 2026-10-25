@@ -1,0 +1,467 @@
+{
+  "version": 0.4,
+  "last_node_id": 11,
+  "last_link_id": 10,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UNETLoader",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "moss_image_base_int8_convrot.safetensors",
+        "default"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "pos": [
+        370,
+        0
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            2,
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "qwen3.5_9b_int8_convrot.safetensors",
+        "moss_image",
+        "default"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "VAELoader",
+      "pos": [
+        740,
+        0
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            9
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "flux2-vae.safetensors"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "LoraLoaderModelOnly",
+      "pos": [
+        1110,
+        0
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoraLoaderModelOnly"
+      },
+      "widgets_values": [
+        "moss_image_base_8step_dmd.safetensors",
+        1.0
+      ]
+    },
+    {
+      "id": 6,
+      "type": "CLIPTextEncode",
+      "pos": [
+        0,
+        440
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            5
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "{\"summary\":{\"caption\":\"A printed Japanese animation storyboard (e-konte) sheet on plain white paper, viewed flat, full page. A thin black ruled table from y=96 to y=1348 pixels: one header row and three equal tall rows below it, five columns separated by straight vertical lines at x=24, 96, 640, 920, 1120, 1192 pixels from the left edge, straight horizontal lines between the rows. Column order from left: cut number, picture, shot description, dialogue, seconds. Each picture cell holds one rough sepia pencil sketch frame; everything else is clean black printed type on white. Render ONLY the listed text items, each in its own area and exactly as written. Do not add any other letters, words, numbers, logos, signatures or decorative text anywhere.\"},\"items\":[{\"label\":\"text\",\"bbox\":[-690,-568,-648,32],\"text\":\"絵コンテ「空の郵便」　1／2\",\"caption\":\"Sheet title, medium bold, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-612,-591,-584,-505],\"text\":\"カット\",\"caption\":\"Table column header, bold, centered in its header cell, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-612,-270,-584,-210],\"text\":\"画面\",\"caption\":\"Table column header, bold, centered in its header cell, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-612,142,-584,202],\"text\":\"内容\",\"caption\":\"Table column header, bold, centered in its header cell, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-612,369,-584,455],\"text\":\"セリフ\",\"caption\":\"Table column header, bold, centered in its header cell, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-612,531,-584,565],\"text\":\"秒\",\"caption\":\"Table column header, bold, centered in its header cell, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-556,-564,-524,-532],\"text\":\"1\",\"caption\":\"Cut number, bold, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"object\",\"bbox\":[-548,-496,-260,16],\"caption\":\"One 16:9 storyboard frame with a thin black border: rough hand-drawn storyboard frame, loose graphite pencil sketch, sepia brown monochrome, light cross hatching and flat sepia wash shading, unfinished pre-production sketch. Long shot. Floating island airstrip. a young woman pilot with two long braids, goggles on her head, aviator jacket and leather mail satchel walks toward the small low-wing monoplane. A distant lighthouse. No text inside the frame.\"},{\"label\":\"text\",\"bbox\":[-556,44,-526,304],\"text\":\"L.S（ロング）FIX\",\"caption\":\"Shot description line, small regular weight, left aligned, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-516,44,-486,304],\"text\":\"空の島の滑走路。\",\"caption\":\"Shot description line, small regular weight, left aligned, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-476,44,-446,304],\"text\":\"少女が郵便機へ\",\"caption\":\"Shot description line, small regular weight, left aligned, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-436,44,-406,304],\"text\":\"歩いていく。\",\"caption\":\"Shot description line, small regular weight, left aligned, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-556,522,-524,576],\"text\":\"4\",\"caption\":\"Shot length in seconds, bold, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-220,518,-192,580],\"text\":\"(4)\",\"caption\":\"Cumulative seconds, small gray, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-156,-564,-124,-532],\"text\":\"2\",\"caption\":\"Cut number, bold, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"object\",\"bbox\":[-148,-496,140,16],\"caption\":\"One 16:9 storyboard frame with a thin black border: rough hand-drawn storyboard frame, loose graphite pencil sketch, sepia brown monochrome, light cross hatching and flat sepia wash shading, unfinished pre-production sketch. Bust shot. Beside the small low-wing monoplane, a young woman pilot with two long braids, goggles on her head, aviator jacket and leather mail satchel slides one envelope into her leather satchel. No text inside the frame.\"},{\"label\":\"text\",\"bbox\":[-156,44,-126,304],\"text\":\"B.S（バスト）\",\"caption\":\"Shot description line, small regular weight, left aligned, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-116,44,-86,304],\"text\":\"機体の横で、\",\"caption\":\"Shot description line, small regular weight, left aligned, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-76,44,-46,304],\"text\":\"封筒をかばんへ\",\"caption\":\"Shot description line, small regular weight, left aligned, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-36,44,-6,304],\"text\":\"入れる。\",\"caption\":\"Shot description line, small regular weight, left aligned, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-156,322,-126,504],\"text\":\"SE：\",\"caption\":\"Dialogue or sound line, small regular weight, left aligned, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-116,322,-86,504],\"text\":\"エンジン始動\",\"caption\":\"Dialogue or sound line, small regular weight, left aligned, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[-156,522,-124,576],\"text\":\"2.5\",\"caption\":\"Shot length in seconds, bold, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[180,518,208,580],\"text\":\"(6.5)\",\"caption\":\"Cumulative seconds, small gray, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[244,-564,276,-532],\"text\":\"3\",\"caption\":\"Cut number, bold, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"object\",\"bbox\":[252,-496,540,16],\"caption\":\"One 16:9 storyboard frame with a thin black border: rough hand-drawn storyboard frame, loose graphite pencil sketch, sepia brown monochrome, light cross hatching and flat sepia wash shading, unfinished pre-production sketch. Medium side tracking shot. the small low-wing monoplane flies left to right above a sea of clouds, the pilot in the open cockpit. No text inside the frame.\"},{\"label\":\"text\",\"bbox\":[244,44,274,304],\"text\":\"M.S 並走 PAN\",\"caption\":\"Shot description line, small regular weight, left aligned, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[284,44,314,304],\"text\":\"（左→右）\",\"caption\":\"Shot description line, small regular weight, left aligned, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[324,44,354,304],\"text\":\"雲海の上を飛ぶ\",\"caption\":\"Shot description line, small regular weight, left aligned, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[364,44,394,304],\"text\":\"郵便機。\",\"caption\":\"Shot description line, small regular weight, left aligned, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[244,522,276,576],\"text\":\"4\",\"caption\":\"Shot length in seconds, bold, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"},{\"label\":\"text\",\"bbox\":[580,518,608,580],\"text\":\"(10.5)\",\"caption\":\"Cumulative seconds, small gray, crisp black printed Japanese gothic type on white paper. Reproduce exactly this string, character for character, with no added or missing characters. Horizontal Japanese text, a single line read left to right.\"}],\"bbox_coord_space\":\"abs_centralized\",\"bbox_format\":\"yxyx\"}"
+      ]
+    },
+    {
+      "id": 7,
+      "type": "CLIPTextEncode",
+      "pos": [
+        370,
+        440
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            6
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "nsfw, worst quality, bad anatomy, watermark, jpeg artifact"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "EmptyFlux2LatentImage",
+      "pos": [
+        740,
+        440
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            7
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyFlux2LatentImage"
+      },
+      "widgets_values": [
+        1216,
+        1440,
+        1
+      ]
+    },
+    {
+      "id": 9,
+      "type": "KSampler",
+      "pos": [
+        1110,
+        440
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 4
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 5
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 6
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            8
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        24102411,
+        "fixed",
+        8,
+        1.0,
+        "euler",
+        "sgm_uniform",
+        1.0
+      ]
+    },
+    {
+      "id": 10,
+      "type": "VAEDecode",
+      "pos": [
+        0,
+        880
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 8
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 9
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            10
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 11,
+      "type": "SaveImage",
+      "pos": [
+        370,
+        880
+      ],
+      "size": [
+        345,
+        400
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ekonte/moss_only/ekonte_p1"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      4,
+      0,
+      "MODEL"
+    ],
+    [
+      2,
+      2,
+      0,
+      6,
+      0,
+      "CLIP"
+    ],
+    [
+      3,
+      2,
+      0,
+      7,
+      0,
+      "CLIP"
+    ],
+    [
+      4,
+      4,
+      0,
+      9,
+      0,
+      "MODEL"
+    ],
+    [
+      5,
+      6,
+      0,
+      9,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      6,
+      7,
+      0,
+      9,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      7,
+      8,
+      0,
+      9,
+      3,
+      "LATENT"
+    ],
+    [
+      8,
+      9,
+      0,
+      10,
+      0,
+      "LATENT"
+    ],
+    [
+      9,
+      3,
+      0,
+      10,
+      1,
+      "VAE"
+    ],
+    [
+      10,
+      10,
+      0,
+      11,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {}
+}
