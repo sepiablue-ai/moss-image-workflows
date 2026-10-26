@@ -1,8 +1,8 @@
-# MOSS Image ComfyUI Workflows (Storyboard & E-Konte Collection)
-
+# MOSS Image ComfyUI Workflows
+ 
 🌐 [日本語](README.md) · **English**
 
-**Ready-to-load ComfyUI workflows for MOSS-Image (INT8 ConvRot + 8-step DMD distilled LoRA). Generate authentic Japanese animation storyboard sheets (e-konte), 6-panel polished cinematic imageboards, and loose sketch grids in a single 8-step inference.**
+**Ready-to-load ComfyUI workflows for MOSS-Image (INT8 ConvRot + 8-step DMD distilled LoRA). Practical workflows covering Japanese manga pages, authentic animation storyboard sheets (e-konte), cinematic multi-panel imageboards, and loose sketch grids in a single 8-step inference pass.**
 
 > **Author**: Kamimoto (かみもと) | Quick benchmarks & updates: **[X (@sep_is_heim)](https://x.com/sep_is_heim)** | In-depth write-ups (Japanese): **[note](https://note.com/sepiablue)**
 
@@ -10,10 +10,12 @@
 
 ## Overview
 
-This repository provides production-ready ComfyUI workflows built around **MOSS-Image**, an open-source multimodal and high-fidelity image foundation model. These workflows are tailored for animation and cinematic pre-production—including storyboard sheets, multi-panel narrative boards, and sketch grids.
+This repository is a central collection of production-ready ComfyUI workflows built around **MOSS-Image**, an open-source multimodal high-fidelity image foundation model. 
+
+It covers practical creative use cases spanning Japanese manga page production (dynamic paneling, character banter, speech balloons, Japanese dialogue, and sound effects), commercial animation storyboard sheets, and multi-panel cinematic imageboards. Workflows leverage MOSS-Image's outstanding native text rendering, precise coordinate-based JSON layout conditioning, and blazing-fast 8-step generation.
 
 - **8-Step High-Speed Generation**: Powered by `moss_image_base_8step_dmd.safetensors`, delivering sharp, artifact-free compositions and high-resolution visuals in just 8 sampling steps.
-- **Native MOSS JSON Layout Control**: Employs bounding box coordinates (`abs_centralized` yxyx format) to simultaneously render ruled table borders, printed Japanese typography (titles, cut numbers, descriptions, dialogues, seconds), and pencil sketch drawings onto a single canvas.
+- **Native MOSS JSON Layout Control**: Employs bounding box coordinates (`abs_centralized` yxyx format) to render slanted manga gutters, speech balloons, onomatopoeia, ruled storyboard sheets, printed typography, and sketches simultaneously onto a single canvas.
 - **Panel-by-Panel Conditioning (via ComfyUI-MOSS-Storyboard)**: In 2×3 (6-panel) grids, describe each frame independently (`[PANEL 1]` through `[PANEL 6]`), with guaranteed clean separation rules and pixel-aligned per-panel cropping.
 - **Custom Style LoRA Integration**: Incorporates `SepiaBlue_Luminous_MOSS-Image_v1` (trigger: `qsv2style`) for luminous lighting, delicate colors, and cinematic anime aesthetics.
 
@@ -23,6 +25,7 @@ This repository provides production-ready ComfyUI workflows built around **MOSS-
 
 | Workflow File | Category | Resolution / Layout | Key Highlights & Use Case |
 |---|---|---|---|
+| [`page_kakeai.json`](page_kakeai.json) | Monochrome Manga Page / Banter | 1024×1536 (7-Panel Slanted Layout) | Manga artist vs. editor on deadline day. Slanted gutters, vertical/horizontal Japanese speech, SFX, and strict character bbox conditioning in one pass |
 | [`ekonte_p1.json`](ekonte_p1.json) | Japanese Animation E-Konte | 1216×1440 (Portrait Sheet) | *Sky Post* (Part 1/2). Ruled table, printed gothic text & pencil sketches in a single pass |
 | [`ekonte_p2.json`](ekonte_p2.json) | Japanese Animation E-Konte | 1216×1440 (Portrait Sheet) | *Sky Post* (Part 2/2). Cuts 4 through 6 concluding the storyboard sequence |
 | [`imageboard_cafe.json`](imageboard_cafe.json) | Polished Imageboard Grid | 6 Panels (2×3, 4:3 each) | Everyday café atmosphere. Japanese Mincho serif captions & luminous anime style |
@@ -34,7 +37,19 @@ This repository provides production-ready ComfyUI workflows built around **MOSS-
 
 ## Detailed Breakdown
 
-### 1. Classic Japanese Animation Storyboard Sheets (E-Konte)
+### 1. Monochrome Manga Page & Dialogue Layout
+
+Generates a complete, publication-style seinen manga manuscript page featuring dense hatching, screentones, dramatic angles, speed lines, slanted diagonal gutters, and crisp Japanese dialogue and onomatopoeia.
+
+- **`page_kakeai.json`**: Deadline day face-off between manga artist Mio and her editor Kurosawa (7 panels).
+- **Resolution**: 1024 × 1536 (Portrait manuscript).
+- **Layout Architecture**: Dynamic modern panel layout with 7 panels of varying dimensions separated by thick slanted white gutters (not a generic grid or horizontal stack).
+- **Native JSON Conditioning**: Utilizes MOSS-Image's native JSON prompt format (`summary` + `items` with `abs_centralized` bounding boxes):
+  - **Identity Consistency**: Strictly binds two recurring characters—Mio (silver-white bob, oversized gray hoodie) and Kurosawa (long black ponytail, rectangular glasses, tailored suit)—to individual panel coordinates and actions.
+  - **Typography & Sound Effects**: Explicitly renders narration boxes (Panel 1: "締切当日、" "午前4時。"), giant bold sound effects (Panel 2: "バンッ"), vertical dialogue balloons (Panel 2: "原稿は？", Panel 4: "居留守は無駄。" "白紙も芸術です", Panel 5: "三時間で描け。", Panel 7: "コーヒーは" "淹れてあげる。"), and comedic shouts (Panel 6: "鬼ーっ！") with exact character string precision.
+- **Sampler Config**: Euler / `sgm_uniform` / 8 steps / CFG 1.0
+
+### 2. Classic Japanese Animation Storyboard Sheets (E-Konte)
 
 Generates full-page, printed-style Japanese animation storyboard sheets on plain white paper. The layout features a 5-column ruled table containing Cut Number, Picture Frame, Shot Description, Dialogue, and Seconds.
 
@@ -44,7 +59,7 @@ Generates full-page, printed-style Japanese animation storyboard sheets on plain
 - **Under the Hood**: Uses MOSS-Image's native JSON prompt structure with exact coordinate-based bounding boxes (`summary` + `items` array). Printed Japanese gothic characters and rough sepia pencil sketch frames are synthesized simultaneously inside their allocated cells.
 - **Sampler Config**: Euler / `sgm_uniform` / 8 steps / CFG 1.0
 
-### 2. Polished Anime Imageboard Grids
+### 3. Polished Anime Imageboard Grids
 
 Ideal for visual development, art direction, and visual pitch decks where full-color cinematic anime frames are presented alongside quiet, restrained captions.
 
@@ -56,7 +71,7 @@ Ideal for visual development, art direction, and visual pitch decks where full-c
 - **Custom Nodes**: Powered by `ComfyUI-MOSS-Storyboard` (`MossStoryboardLayout`, `MossStoryboardSampler`).
 - **Typography & Aesthetics**: Each illustration sits above a white caption strip with a fine Japanese Mincho serif body text and shot index, mimicking printed film boards.
 
-### 3. Loose Sketch Storyboard Grid
+### 4. Loose Sketch Storyboard Grid
 
 Focuses strictly on dynamic cinematography, character gesture, staging, and lighting contrast without typography or text distractions.
 
