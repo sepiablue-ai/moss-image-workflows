@@ -1,0 +1,101 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "moss_image_sft_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "LoraLoaderModelOnly",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "lora_name": "lora.safetensors",
+      "strength_model": 1.0
+    }
+  },
+  "3": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen3.5_9b_int8_convrot.safetensors",
+      "type": "moss_image",
+      "device": "default"
+    }
+  },
+  "4": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "flux2-vae.safetensors"
+    }
+  },
+  "7": {
+    "class_type": "MossStoryboardLayout",
+    "inputs": {
+      "prompt": "",
+      "panels": 4,
+      "panel_aspect": "1:1",
+      "panel_edge": 640,
+      "canvas_aspect": "auto",
+      "columns": 4,
+      "rows": 1,
+      "gutter": 8,
+      "margin": 8,
+      "cell_gray": 25,
+      "invert": false,
+      "label": "object"
+    }
+  },
+  "5": {
+    "class_type": "MossStoryboardSampler",
+    "inputs": {
+      "model": [
+        "2",
+        0
+      ],
+      "clip": [
+        "3",
+        0
+      ],
+      "vae": [
+        "4",
+        0
+      ],
+      "positive": "A professional anime storyboard sheet with exactly FOUR square panels arranged in a SINGLE HORIZONTAL ROW, four columns and one row, left to right. Read panels in numerical order 1,2,3,4. Each panel has a cinematic anime illustration in its upper 75 percent, and a clean white production-note band in its bottom 25 percent. In each band render the requested English text EXACTLY, in large legible black lettering. These notes are essential. Do not add translations, speech balloons or other text. Thin white separation between panels. Consistent adult young woman with chestnut bob hair, teal eyes, mustard yellow hooded coat, cream scarf, tan bag. Consistent tiny round mint-green glowing sprite with two leaf ears and black bead eyes. Twilight mossy forest, dark tree trunks, ferns, blue ambient light and warm green glow. Crisp clean anime line art and soft shading. The image shows static key poses; the written notes specify the movements to animate later.\n[PANEL 1]: Square medium shot: the young woman stands facing the tiny glowing sprite beside a mossy root. Her right hand is raised, held still in a greeting pose. Her face and right hand are fully visible. In the large white note band at the bottom of this panel, print exactly: \"1 Wave your right hand twice.\".\n[PANEL 2]: Square close shot: the small leaf-eared mint sprite sits on moss facing the viewer, with open space to its left. Clearly show its feet and both leaf ears. In the large white note band at the bottom of this panel, print exactly: \"2 Hop once to the left.\".\n[PANEL 3]: Square medium close shot: the woman kneels and holds the sprite on her open palm in front of her. The sprite is upright and facing the viewer, and her face smiles above it. In the large white note band at the bottom of this panel, print exactly: \"3 Spin once on her palm.\".\n[PANEL 4]: Square close portrait: the woman gently holds the sprite next to her cheek, smiling with her teal eyes still OPEN in this key pose. In the large white note band at the bottom of this panel, print exactly: \"4 Close your eyes and smile.\".\n",
+      "negative": "",
+      "steps": 8,
+      "cfg": 1.0,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "seed": 261027,
+      "denoise": 1.0,
+      "spec": [
+        "7",
+        4
+      ],
+      "init": "layout",
+      "label": "object",
+      "reborder": false,
+      "border_px": 0,
+      "shave": 0,
+      "panels": 4,
+      "panel_aspect": "1:1",
+      "panel_edge": 640,
+      "canvas_aspect": "auto",
+      "gutter": 8,
+      "margin": 8
+    }
+  },
+  "6": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "5",
+        0
+      ],
+      "filename_prefix": "moss_individual/horizontal_english_8step"
+    }
+  }
+}

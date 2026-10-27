@@ -32,6 +32,8 @@
 | [`imageboard_rainy_cat.json`](imageboard_rainy_cat.json) | ポリッシュド・イメージボード | 6コマ (2×3, 各コマ 4:3) | 雨の日の少女と猫。情緒的な光と色彩のストーリーボード |
 | [`imageboard_sky_post.json`](imageboard_sky_post.json) | ポリッシュド・イメージボード | 6コマ (2×3, 各コマ 4:3) | 飛行艇と島々を巡る空の郵便配達。冒険の息吹を感じるシネマティックボード |
 | [`sketch_grid.json`](sketch_grid.json) | ラフスケッチ・グリッド | 6コマ (2×3, 各コマ 16:9) | セピアモノクロ鉛筆スケッチ。余計な文字を排除した純粋な画面構成・演出検討用 |
+| [`moss_storyboard_horizontal_4panels_dmd8.api.json`](moss_storyboard_horizontal_4panels_dmd8.api.json) | 横並び4コマ指示帯付き絵コンテ | 4コマ (4×1, 1:1, 全体横長) | MOSS-Image 8-step。上部75%が美麗アニメイラスト、下部25%が英語アクション指示帯。動画生成（Ref2VA）連携に最適化 |
+| [`h3_storyboard_ref2va_14s_bgm.api.json`](h3_storyboard_ref2va_14s_bgm.api.json) | 絵コンテ連動 4カット動画＆BGM生成 | 1024×1792 (9:16) / 14秒 (345F) | MiniMax H3 (FastH3 8-step)。MOSSで生成した4コマ絵コンテから、指示テキストを映像化し4カット連続動画＋環境音＋劇伴BGMを一括生成 |
 
 ---
 
@@ -80,6 +82,44 @@
 - **テイスト**: クリーム色の紙に描かれたセピア調グラファイト鉛筆スケッチ（Rough graphite pencil sketch）。
 - **プロンプト指定**: `MossStoryboardSampler` の `[STYLE] ... [PANEL 1] ... [PANEL 6]` 記法を使用。飛行艇のパイロット少女と老灯台守の出会いと別れを映画的なカメラワークで描き出します。
 
+### 5. 横並び4コマ・指示帯付き絵コンテ (Horizontal 4-Panel Directive Storyboard)
+
+動画生成（Ref2VA / S2V）へのリファレンス入力を前提に設計された、横1列（1行×4列）配置のストーリーボードワークフローです。
+
+- **`moss_storyboard_horizontal_4panels_dmd8.api.json`**
+- **レイアウト構成**: 横1列 × 4コマ（1行4列、各コマ 1:1 正方形、panel_edge: 640px）。
+- **特徴的な構造（75:25分割）**:
+  - 各コマの**上部75%**に、シネマティックアニメ調の高品質なキーポーズイラストを生成。
+  - 各コマの**下部25%**に、クリーンな白地のアクション指示帯（Production-note band）を生成。
+- **ディレクティブテキスト描画**:
+  - コマ1: `1 Wave your right hand twice.`（右手を2回振る）
+  - コマ2: `2 Hop once to the left.`（左へ1回跳ねる）
+  - コマ3: `3 Spin once on her palm.`（手のひらの上で1回転する）
+  - コマ4: `4 Close your eyes and smile.`（目を閉じて微笑む）
+  MOSS-Imageの高いテキスト描画精度を活かし、アニメーションの具体的な演技指示を英語テキストで帯内に高精度レンダリングします。
+- **後段連携**: この1枚の画像をそのまま MiniMax H3 などの動画生成モデルに入力することで、キャラクターの外見一貫性とカットごとの動作指示を同時に渡すことができます。
+- **サンプラー設定**: Euler / `simple` / 8 steps / CFG 1.0 (DMD 8-step LoRA適用)
+
+### 6. 絵コンテ連携・14秒4カット動画＆劇伴同時生成 (Storyboard-to-Video Ref2VA with BGM)
+
+上記「横並び4コマ絵コンテ（`moss_storyboard_horizontal_4panels_dmd8`）」で出力された1枚の画像をリファレンスとして読み込み、**14秒・全4カットの連続アニメーション映像＋同期環境音＋通しの劇伴BGM**を1パスで生成するMiniMax H3連携パイプラインです。
+
+- **`h3_storyboard_ref2va_14s_bgm.api.json`**
+- **生成スペック**: 1024 × 1792 (9:16 縦長シネマティック) / 345フレーム (24fps・約14秒) / 全4カット（各カット約3.5秒）
+- **絵コンテからのマルチショット展開**:
+  - 入力された絵コンテ画像（`<Picture 1>`）の4つのコマをそれぞれ [Shot 1] 〜 [Shot 4] にマッピング。
+  - 絵コンテの外枠・仕切り線・下部の白い指示帯テキストは自動的に除外（フルスクリーン映像のみを出力）。
+  - 各カットはモーフィングではなく映画的な「ハードカット」で切り替わり、指示帯に書かれた演技指示（手を振る→跳ねる→回転する→目を閉じる）を忠実にアニメーション化。
+- **音響・劇伴BGM同時生成 (Audio / Soundscape / Music)**:
+  - **環境音（SE）**: Shot 1の衣擦れと森の環境音、Shot 2の着地音、Shot 3の魔法光の輝き音、Shot 4の静かな息遣いなど、カット展開に同期したリアルなサウンドスケープを生成。
+  - **劇伴BGM**: テンポ76 BPM前後の情緒的で優しいファンタジー楽曲（チェレスタの主旋律、ハープのアルペジオ、ストリングスパッド）が映像全体を通して流れ、ラストの微笑みとともに穏やかに終止。
+- **高速化スタック & ハードウェアエンコード**:
+  - FastH3 8-step (`fasth3_omniref_8step_pruned_int8_convrot.safetensors`) + Qwen3-VL 32B NVFP4。
+  - FastH3最適化ノード（Prefetch, ChunkFFN, ProducerReuse, BlockSparseAttention, MiniMaxH3SigmaShift）をフル適用。
+  - LBH（Latent Bilinear Handoff）による2段階サンプリング（低解像度 5 steps + 高解像度 3 steps）。
+  - Real-ESRGAN (`realesr-animevideov3.pth`) によるクオリティアップスケール。
+  - `FastH3AccelStreamSave` による非同期NVENCハードウェアエンコード保存。
+
 ---
 
 ## 必要なモデルと配置先
@@ -88,11 +128,17 @@
 
 | 種類 | モデルファイル名 | 配置先ディレクトリ | 備考 |
 |---|---|---|---|
-| **UNet / Diffusion** | `moss_image_base_int8_convrot.safetensors` | `ComfyUI/models/unet/` (または `diffusion_models/`) | MOSS-Image INT8 ConvRot ベースモデル |
-| **CLIP / Text Encoder** | `qwen3.5_9b_int8_convrot.safetensors` | `ComfyUI/models/clip/` | Type: `moss_image` |
-| **VAE** | `flux2-vae.safetensors` | `ComfyUI/models/vae/` | FLUX.2 VAE |
-| **Speed LoRA** | `moss_image_base_8step_dmd.safetensors` | `ComfyUI/models/loras/` | 8-step DMD蒸留LoRA (強度 1.0) |
-| **Style LoRA** | `SepiaBlue_Luminous_MOSS-Image_v1.safetensors` | `ComfyUI/models/loras/moss/` | `imageboard_*.json` で使用 (トリガー: `qsv2style`) |
+| **UNet / Diffusion (MOSS)** | `moss_image_base_int8_convrot.safetensors` / `moss_image_sft_int8_convrot.safetensors` | `ComfyUI/models/unet/` (または `diffusion_models/`) | MOSS-Image INT8 ConvRot ベース/SFTモデル |
+| **CLIP / Text Encoder (MOSS)** | `qwen3.5_9b_int8_convrot.safetensors` | `ComfyUI/models/clip/` | Type: `moss_image` |
+| **VAE (MOSS)** | `flux2-vae.safetensors` | `ComfyUI/models/vae/` | FLUX.2 VAE |
+| **Speed LoRA (MOSS)** | `moss_image_base_8step_dmd.safetensors` (または `lora.safetensors`) | `ComfyUI/models/loras/` | 8-step DMD蒸留LoRA (強度 1.0) |
+| **Style LoRA (MOSS)** | `SepiaBlue_Luminous_MOSS-Image_v1.safetensors` | `ComfyUI/models/loras/moss/` | `imageboard_*.json` で使用 (トリガー: `qsv2style`) |
+| **DiT / UNet (FastH3)** | `fasth3_omniref_8step_pruned_int8_convrot.safetensors` | `ComfyUI/models/unet/` | FastH3 OmniRef 8-step DiT (`h3_storyboard_*.json`) |
+| **CLIP / Text Encoder (FastH3)** | `qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors` | `ComfyUI/models/clip/` | Type: `minimax` (FastH3 NVFP4/AWQ) |
+| **Video VAE (FastH3)** | `minimax_h3_video_vae_int8_convrot.safetensors` | `ComfyUI/models/vae/` | MiniMax H3 Video VAE |
+| **Audio VAE (FastH3)** | `minimax_h3_audio_vae_fp32.safetensors` | `ComfyUI/models/vae/` | MiniMax H3 Audio VAE (環境音・BGMデコード用) |
+| **Latent Upscaler (FastH3)** | `minimax_h3_latent_upscaler_3d_conv_v1_fp16.safetensors` | `ComfyUI/models/upscale_models/` | LBHアップスケーラー |
+| **Video Upscaler** | `realesr-animevideov3.pth` | `ComfyUI/models/upscale_models/` | Real-ESRGAN アニメ動画アップスケールモデル |
 
 ---
 
@@ -101,6 +147,8 @@
 - **[ComfyUI-MOSS-Storyboard](https://github.com/sepiablue-ai/ComfyUI-MOSS-Storyboard)**
   - 提供ノード: `MossStoryboardLayout`, `MossStoryboardSampler`, `MossStoryboardCrop`
   - インストール方法: `ComfyUI/custom_nodes/` に本リポジトリを git clone するか、ComfyUI Manager から導入してください。
+- **[ComfyUI-H3-X2-Stream](https://github.com/sepiablue-ai/ComfyUI-H3-X2-Stream)**
+  - 提供ノード: `FastH3AccelStreamSave`, `FastH3AccelLBHHandoff` 等の FastH3 最適化＆非同期NVENC保存ノード。
 - **ComfyUI 本体**: PR #17095 以降の MOSS-Image ネイティブ対応版（ComfyUI ≥ 0.42.0 推奨）。
 
 ---
